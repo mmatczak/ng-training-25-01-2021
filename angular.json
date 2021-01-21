@@ -123,5 +123,9 @@
       }
     }
   },
-  "defaultProject": "book-app"
+  "defaultProject": "book-app",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics",
+    "analytics": false
+  }
 }
