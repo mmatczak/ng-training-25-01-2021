@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Book } from '../../model/book';
 
 @Component({
@@ -7,12 +7,8 @@ import { Book } from '../../model/book';
   styleUrls: ['./book-details.component.scss'],
 })
 export class BookDetailsComponent {
-  readonly book: Book;
+  @Input()
+  book: Book | undefined;
 
-  constructor() {
-    this.book = {
-      title: 'Angular for nerds',
-      author: 'Marek Matczak',
-    };
-  }
+  constructor() {}
 }

@@ -1,0 +1,26 @@
+<div class="row">
+  <table class="table table-hover col">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Author</th>
+      <th scope="col">Title</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let book of books; index as i"
+        (click)="selectBook(book)"
+        [class.table-primary]="isBookSelected(book)">
+      <td>{{i + 1}}</td>
+      <td>{{book.author}}</td>
+      <td>{{book.title}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <section class="col-4">
+    <ba-book-details
+      *ngIf="selectedBook"
+      [book]="selectedBook"></ba-book-details>
+  </section>
+</div>
+<p>{{ selectedBook | json }}</p>
