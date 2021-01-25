@@ -20,7 +20,8 @@
   <section class="col-4">
     <ba-book-details
       *ngIf="selectedBook"
-      [book]="selectedBook"></ba-book-details>
+      [book]="selectedBook"
+      (bookChange)="updateBooksOn($event)"
+    ></ba-book-details>
   </section>
 </div>
-<p>{{ selectedBook | json }}</p>

@@ -7,21 +7,24 @@ import { Book } from '../../model/book';
   styleUrls: ['./book-overview.component.scss'],
 })
 export class BookOverviewComponent {
-  readonly books: Book[];
+  books: Book[];
   selectedBook: Book | null;
 
   constructor() {
     this.selectedBook = null;
     this.books = [
       {
+        id: 0,
         title: 'Angular for nerds',
         author: 'Marek Matczak',
       },
       {
+        id: 1,
         title: 'JavaScript. The Good Parts',
         author: 'Douglas Crckford',
       },
       {
+        id: 2,
         title: 'Some funny book',
         author: 'John Example',
       },
@@ -34,5 +37,10 @@ export class BookOverviewComponent {
 
   isBookSelected(book: Book): boolean {
     return this.selectedBook === book;
+  }
+
+  updateBooksOn(bookToUpdate: Book) {
+    this.books = this.books.map((book) => (book.id === bookToUpdate.id ? bookToUpdate : book));
+    this.selectedBook = bookToUpdate;
   }
 }
