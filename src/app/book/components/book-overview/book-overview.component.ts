@@ -1,34 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Book } from '../../model/book';
+import { BookService } from '../../services/book.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'ba-book-overview',
   templateUrl: './book-overview.component.html',
   styleUrls: ['./book-overview.component.scss'],
 })
-export class BookOverviewComponent {
-  books: Book[];
+export class BookOverviewComponent implements OnDestroy {
+  readonly books$: Observable<Book[]>;
   selectedBook: Book | null;
+  private readonly books: BookService;
 
-  constructor() {
+  private readonly subscriptions: Subscription[] = [];
+
+  constructor(books: BookService) {
+    this.books = books;
     this.selectedBook = null;
-    this.books = [
-      {
-        id: 0,
-        title: 'Angular for nerds',
-        author: 'Marek Matczak',
-      },
-      {
-        id: 1,
-        title: 'JavaScript. The Good Parts',
-        author: 'Douglas Crckford',
-      },
-      {
-        id: 2,
-        title: 'Some funny book',
-        author: 'John Example',
-      },
-    ];
+    this.books$ = books.getAll();
   }
 
   selectBook(book: Book): void {
@@ -40,7 +30,12 @@ export class BookOverviewComponent {
   }
 
   updateBooksOn(bookToUpdate: Book) {
-    this.books = this.books.map((book) => (book.id === bookToUpdate.id ? bookToUpdate : book));
-    this.selectedBook = bookToUpdate;
+    this.subscriptions.push(
+      this.books.update(bookToUpdate).subscribe((updatedBook) => (this.selectedBook = updatedBook)),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

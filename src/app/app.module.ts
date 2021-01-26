@@ -7,7 +7,6 @@ import { BookModule } from './book/book.module';
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, BookModule],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
