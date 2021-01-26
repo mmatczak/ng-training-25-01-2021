@@ -1,18 +1,20 @@
-import { Component, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Book } from '../../model/book';
 import { BookService } from '../../services/book.service';
-import { Observable, Subscription } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
+import { debounceTime, distinct, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'ba-book-overview',
   templateUrl: './book-overview.component.html',
   styleUrls: ['./book-overview.component.scss'],
 })
-export class BookOverviewComponent implements OnDestroy {
+export class BookOverviewComponent implements OnDestroy, AfterViewInit {
+  @ViewChild('mySearch')
+  searchInput: ElementRef | undefined;
   readonly books$: Observable<Book[]>;
   selectedBook: Book | null;
   private readonly books: BookService;
-
   private readonly subscriptions: Subscription[] = [];
 
   constructor(books: BookService) {
@@ -37,5 +39,22 @@ export class BookOverviewComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  ngAfterViewInit(): void {
+    const mySearchInput = this.searchInput?.nativeElement;
+    fromEvent<Event>(mySearchInput, 'input')
+      .pipe(
+        map((event) => {
+          const currentInputTarget = event.target as HTMLInputElement;
+          return currentInputTarget.value;
+        }),
+        debounceTime(500),
+        distinct(),
+        switchMap((query) => this.books.getAll()),
+      )
+      .subscribe((books: Book[]) => {
+        console.log(books);
+      });
   }
 }
