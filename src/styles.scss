@@ -1,2 +1,6 @@
 $primary: #0099da;
 @import '~bootstrap/scss/bootstrap';
+
+.ng-invalid.ng-touched, .ng-submitted .ng-invalid {
+  @extend .is-invalid;
+}
