@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Book } from '../../model/book';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 type FormModel = Omit<Book, 'id'>;
 
@@ -18,7 +18,7 @@ export class BookDetailsComponent {
 
   constructor(route: ActivatedRoute, private readonly books: BookService, private readonly router: Router) {
     this.bookForm = new FormGroup({
-      author: new FormControl('', Validators.required),
+      author: new FormControl('', [Validators.required, Validators.maxLength(10)]),
       title: new FormControl('', Validators.required),
     });
     this.book = route.snapshot.data['book'];
@@ -41,5 +41,21 @@ export class BookDetailsComponent {
       };
       this.books.saveOrUpdate(updatedBook).subscribe(() => this.router.navigateByUrl('/books'));
     }
+  }
+
+  getErrorMessagesFor(control: AbstractControl | null): string[] {
+    const errors = control?.errors;
+    return errors
+      ? Object.keys(errors).map((errorCode) => {
+          switch (errorCode) {
+            case 'required':
+              return 'Please provide a value';
+            case 'maxlength':
+              return `The value is too long: max is ${errors[errorCode].requiredLength} character(s)`;
+            default:
+              return 'Unknown error';
+          }
+        })
+      : [];
   }
 }

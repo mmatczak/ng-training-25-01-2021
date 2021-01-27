@@ -4,15 +4,22 @@
       [class.ng-submitted]="bookFormDirective.submitted">
   <div class="form-group">
     <label for="author">Author:</label>
-    <input id="author"
-           class="form-control"
-           formControlName="author">
+<!--    <with-form-errors>-->
+      <input id="author"
+             class="form-control"
+             formControlName="author">
+<!--    </with-form-errors>-->
+<!--    <ba-form-errors [of]="bookForm.get('author')"></ba-form-errors>-->
+<!--    <div class="invalid-feedback">-->
+      <ba-form-errors [control]="bookForm.get('author')"></ba-form-errors>
+<!--    </div>-->
   </div>
   <div class="form-group">
     <label for="title">Title:</label>
     <input id="title"
            class="form-control"
            formControlName="title">
+    <ba-form-errors [control]="bookForm.get('title')"></ba-form-errors>
   </div>
   <div class="row">
     <div class="col-3">
