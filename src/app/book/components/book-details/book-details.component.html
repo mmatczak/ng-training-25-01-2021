@@ -1,4 +1,4 @@
-<form (submit)="notifyOnBookChange($event)">
+<form (submit)="save($event)">
   <div class="form-group">
     <label for="author">Author:</label>
     <input id="author" class="form-control"
@@ -11,7 +11,7 @@
   </div>
   <div class="row">
     <div class="col-3">
-      <button class="btn btn-primary">Apply</button>
+      <button class="btn btn-primary">Save</button>
     </div>
   </div>
 </form>

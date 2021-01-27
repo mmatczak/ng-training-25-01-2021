@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { Book } from '../../model/book';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BookService } from '../../services/book.service';
 
 @Component({
   selector: 'ba-book-details',
@@ -7,15 +9,13 @@ import { Book } from '../../model/book';
   styleUrls: ['./book-details.component.scss'],
 })
 export class BookDetailsComponent {
-  @Input()
   book: Book | undefined;
 
-  @Output()
-  bookChange = new EventEmitter<Book>();
+  constructor(route: ActivatedRoute, private readonly books: BookService, private readonly router: Router) {
+    this.book = route.snapshot.data['book'];
+  }
 
-  constructor() {}
-
-  notifyOnBookChange(event: Event) {
+  save(event: Event) {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
@@ -27,6 +27,7 @@ export class BookDetailsComponent {
       author: authorInput?.value || '',
       title: titleInput?.value || '',
     };
-    this.bookChange.emit(updatedBook);
+
+    this.books.saveOrUpdate(updatedBook).subscribe(() => this.router.navigateByUrl('/books'));
   }
 }

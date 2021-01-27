@@ -1,24 +1,21 @@
 import { Book } from '../model/book';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class BookService {
+  private idSeq = 0;
   private readonly booksSubject$ = new BehaviorSubject<Book[]>([
     {
-      id: 0,
+      id: this.idSeq++,
       title: 'Angular for nerds',
       author: 'Marek Matczak',
     },
     {
-      id: 1,
+      id: this.idSeq++,
       title: 'JavaScript. The Good Parts',
       author: 'Douglas Crckford',
     },
     {
-      id: 2,
+      id: this.idSeq++,
       title: 'Some funny book',
       author: 'John Example',
     },
@@ -28,15 +25,36 @@ export class BookService {
     return this.booksSubject$.asObservable();
   }
 
-  update(bookToUpdate: Book): Observable<Book> {
+  saveOrUpdate(bookToUpdate: Book): Observable<Book> {
     return new Observable<Book>((subscriber) => {
-      const copy = { ...bookToUpdate };
+      let newOrUpdatedBook: Book;
+      let newBooks: Book[];
       const oldBooks = this.booksSubject$.getValue();
-      const newBooks = oldBooks.map((book) => (book.id === copy.id ? copy : book));
+
+      if (bookToUpdate.id != null) {
+        newOrUpdatedBook = { ...bookToUpdate };
+        newBooks = oldBooks.map((book) => (book.id === newOrUpdatedBook.id ? newOrUpdatedBook : book));
+      } else {
+        newOrUpdatedBook = { ...bookToUpdate, id: this.idSeq++ };
+        newBooks = [...oldBooks, newOrUpdatedBook];
+      }
       this.booksSubject$.next(newBooks);
 
-      subscriber.next(copy);
+      subscriber.next(newOrUpdatedBook);
       subscriber.complete();
+    });
+  }
+
+  getOne(id: number): Observable<Book> {
+    return new Observable<Book>((subscriber) => {
+      const currentBooks = this.booksSubject$.getValue();
+      const foundBook = currentBooks.find((book) => book.id === id);
+      if (foundBook) {
+        subscriber.next(foundBook);
+        subscriber.complete();
+      } else {
+        subscriber.error(`Book with id ${id} could not be found`);
+      }
     });
   }
 }
