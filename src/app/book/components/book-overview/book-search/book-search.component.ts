@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({
   selector: 'ba-book-search',
@@ -21,6 +23,8 @@ export class BookSearchComponent {
     this.searchForm = new FormGroup({
       query: new FormControl(),
       age: new FormControl(2),
+      iataFrom: new FormControl(),
+      iataTo: new FormControl(),
     });
   }
 
