@@ -8,11 +8,13 @@ import { BookOverviewComponent } from './book/components/book-overview/book-over
 import { BookDetailsComponent } from './book/components/book-details/book-details.component';
 import { BookResolver } from './book/components/book-details/book.resolver';
 import { SharedModule } from './shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
     SharedModule,
     BookModule.forRoot(),
     RouterModule.forRoot([

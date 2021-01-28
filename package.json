@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:backend": "json-server --watch backend/books.json --routes backend/routes.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -45,6 +46,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
+    "json-server": "^0.16.3",
     "karma": "~5.1.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",

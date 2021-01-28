@@ -1,60 +1,26 @@
 import { Book } from '../model/book';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class BookService {
-  private idSeq = 0;
-  private readonly booksSubject$ = new BehaviorSubject<Book[]>([
-    {
-      id: this.idSeq++,
-      title: 'Angular for nerds',
-      author: 'Marek Matczak',
-    },
-    {
-      id: this.idSeq++,
-      title: 'JavaScript. The Good Parts',
-      author: 'Douglas Crckford',
-    },
-    {
-      id: this.idSeq++,
-      title: 'Some funny book',
-      author: 'John Example',
-    },
-  ]);
+  constructor(private readonly http: HttpClient) {}
 
   getAll(): Observable<Book[]> {
-    return this.booksSubject$.asObservable();
+    return this.http.get<Book[]>('api/books');
   }
 
   saveOrUpdate(bookToUpdate: Book): Observable<Book> {
-    return new Observable<Book>((subscriber) => {
-      let newOrUpdatedBook: Book;
-      let newBooks: Book[];
-      const oldBooks = this.booksSubject$.getValue();
-
-      if (bookToUpdate.id != null) {
-        newOrUpdatedBook = { ...bookToUpdate };
-        newBooks = oldBooks.map((book) => (book.id === newOrUpdatedBook.id ? newOrUpdatedBook : book));
-      } else {
-        newOrUpdatedBook = { ...bookToUpdate, id: this.idSeq++ };
-        newBooks = [...oldBooks, newOrUpdatedBook];
-      }
-      this.booksSubject$.next(newBooks);
-
-      subscriber.next(newOrUpdatedBook);
-      subscriber.complete();
-    });
+    let newOrUpdatedBook = { ...bookToUpdate };
+    if (bookToUpdate.id != null) {
+      return this.http.put<Book>(`api/books/${bookToUpdate.id}`, newOrUpdatedBook);
+    } else {
+      return this.http.post<Book>('api/books', newOrUpdatedBook);
+    }
   }
 
   getOne(id: number): Observable<Book> {
-    return new Observable<Book>((subscriber) => {
-      const currentBooks = this.booksSubject$.getValue();
-      const foundBook = currentBooks.find((book) => book.id === id);
-      if (foundBook) {
-        subscriber.next(foundBook);
-        subscriber.complete();
-      } else {
-        subscriber.error(`Book with id ${id} could not be found`);
-      }
-    });
+    return this.http.get<Book>(`api/books/${id}`);
   }
 }
