@@ -4,10 +4,11 @@ import { HeaderComponent } from './dialogs/header/header.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormErrorsComponent } from './forms/form-errors/form-errors.component';
+import { WithFormErrorsComponent } from './forms/with-form-errors/with-form-errors.component';
 
 @NgModule({
-  declarations: [HeaderComponent, FormErrorsComponent],
-  exports: [CommonModule, HeaderComponent, ReactiveFormsModule, FormErrorsComponent],
+  declarations: [HeaderComponent, FormErrorsComponent, WithFormErrorsComponent],
+  exports: [CommonModule, HeaderComponent, ReactiveFormsModule, FormErrorsComponent, WithFormErrorsComponent],
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
 })
 export class SharedModule {}

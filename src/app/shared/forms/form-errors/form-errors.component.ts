@@ -14,7 +14,8 @@ export class FormErrorsComponent {
 
   errors$: Observable<string[]> | undefined;
 
-  @Input()
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  @Input('of')
   set control(newControl: AbstractControl | undefined | null) {
     if (newControl) {
       this.errors$ = newControl.statusChanges.pipe(
