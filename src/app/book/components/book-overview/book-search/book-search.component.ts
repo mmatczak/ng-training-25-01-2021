@@ -9,7 +9,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class BookSearchComponent {
   @Input()
   set query(newQuery: string | undefined | null) {
-    this.searchForm.setValue({ query: newQuery || '' });
+    this.searchForm.patchValue({ query: newQuery || '' });
   }
 
   @Output()
@@ -20,6 +20,7 @@ export class BookSearchComponent {
   constructor() {
     this.searchForm = new FormGroup({
       query: new FormControl(),
+      age: new FormControl(2),
     });
   }
 

@@ -3,9 +3,17 @@ import { Location } from '@angular/common';
 import { Book } from '../../model/book';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
+import { of, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 type FormModel = Omit<Book, 'id'>;
 
@@ -29,7 +37,7 @@ export class BookDetailsComponent implements OnDestroy {
   ) {
     this.bookForm = new FormGroup({
       author: new FormControl('', [Validators.required, Validators.maxLength(20)]),
-      title: new FormControl('', Validators.required),
+      title: new FormControl('', [Validators.required, contains('JavaScript')], this.validateIfTitleAlreadyExist),
     });
     this.book = route.snapshot.data['book'];
     if (this.book) {
@@ -56,24 +64,33 @@ export class BookDetailsComponent implements OnDestroy {
     }
   }
 
-  getErrorMessagesFor(control: AbstractControl | null): string[] {
-    const errors = control?.errors;
-    return errors
-      ? Object.keys(errors).map((errorCode) => {
-          switch (errorCode) {
-            case 'required':
-              return 'Please provide a value';
-            case 'maxlength':
-              return `The value is too long: max is ${errors[errorCode].requiredLength} character(s)`;
-            default:
-              return 'Unknown error';
-          }
-        })
-      : [];
-  }
-
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.unsubscribe();
   }
+
+  validateIfTitleAlreadyExist: AsyncValidatorFn = (control: AbstractControl) => {
+    const value: string = control.value;
+    if (value) {
+      return this.books.search(value).pipe(
+        map((books) => {
+          return books && books.length > 0 ? { titleAlreadyUsed: true } : null;
+        }),
+      );
+    }
+
+    return of(null);
+  };
+}
+
+function contains(text: string): ValidatorFn {
+  return function containsValidator(control: AbstractControl): ValidationErrors | null {
+    const value: string = control.value;
+    if (value && value.indexOf(text) === -1) {
+      return {
+        contains: { text },
+      };
+    }
+    return null;
+  };
 }

@@ -1,0 +1,9 @@
+<button (click)="decrement()"
+        (blur)="markAsTouched()">-
+</button>
+<input [value]="internalValue"
+       (blur)="markAsTouched()"
+       (input)="notifyAboutChange($event)">
+<button (click)="increment()"
+        (blur)="markAsTouched()">+
+</button>

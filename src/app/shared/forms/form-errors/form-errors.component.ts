@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -40,6 +40,8 @@ function getErrorMessagesOf(control: AbstractControl | null): string[] {
             return 'Please provide a value';
           case 'maxlength':
             return `The value is too long: max is ${errors[errorCode].requiredLength} character(s)`;
+          case 'contains':
+            return `Please provide a value containing "${errors[errorCode].text}"`;
           default:
             return 'Unknown error';
         }
