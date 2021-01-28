@@ -1,0 +1,13 @@
+<form (ngSubmit)="notifyOnQueryChange()"
+      [formGroup]="searchForm"
+      class="row">
+  <div class="col-5">
+    <input aria-label="query"
+           class="form-control"
+           formControlName="query"
+           placeholder="Type your query here...">
+  </div>
+  <div class="col-5">
+    <button class="btn btn-primary">Go</button>
+  </div>
+</form>

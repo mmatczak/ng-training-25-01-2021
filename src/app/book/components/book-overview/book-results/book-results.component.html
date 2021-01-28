@@ -1,0 +1,22 @@
+<table *ngIf="results && results.length > 0; else noResults"
+  class="table table-hover">
+  <thead class="thead-dark">
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Author</th>
+    <th scope="col">Title</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let book of results; index as i"
+      (click)="notifyOnBookClick(book)">
+    <td>{{i + 1}}</td>
+    <td>{{book.author}}</td>
+    <td>{{book.title}}</td>
+  </tr>
+  </tbody>
+</table>
+
+<ng-template #noResults>
+  <p>No results to show</p>
+</ng-template>

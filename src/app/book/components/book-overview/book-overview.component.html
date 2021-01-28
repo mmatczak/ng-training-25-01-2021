@@ -1,17 +1,4 @@
-<table class="table table-hover">
-  <thead class="thead-dark">
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">Author</th>
-    <th scope="col">Title</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let book of books$ | async; index as i"
-      (click)="goToDetails(book)">
-    <td>{{i + 1}}</td>
-    <td>{{book.author}}</td>
-    <td>{{book.title}}</td>
-  </tr>
-  </tbody>
-</table>
+<ba-book-search [query]="query$ | async"
+                (queryChange)="updateUrlOnNewQuery($event)"></ba-book-search>
+<ba-book-results [results]="matchingBooks$ | async"
+                 (bookClick)="goToDetails($event)"></ba-book-results>

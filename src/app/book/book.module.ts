@@ -4,9 +4,11 @@ import { BookOverviewComponent } from './components/book-overview/book-overview.
 import { BookService } from './services/book.service';
 import { BookResolver } from './components/book-details/book.resolver';
 import { SharedModule } from '../shared/shared.module';
+import { BookSearchComponent } from './components/book-overview/book-search/book-search.component';
+import { BookResultsComponent } from './components/book-overview/book-results/book-results.component';
 
 @NgModule({
-  declarations: [BookDetailsComponent, BookOverviewComponent],
+  declarations: [BookDetailsComponent, BookOverviewComponent, BookSearchComponent, BookResultsComponent],
   imports: [SharedModule],
   exports: [BookOverviewComponent],
 })

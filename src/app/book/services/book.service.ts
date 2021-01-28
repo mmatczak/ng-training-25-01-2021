@@ -1,11 +1,16 @@
 import { Book } from '../model/book';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable()
 export class BookService {
   constructor(private readonly http: HttpClient) {}
+
+  search(query: string): Observable<Book[]> {
+    const params = new HttpParams().append('q', query);
+    return this.http.get<Book[]>('api/books', { params });
+  }
 
   getAll(): Observable<Book[]> {
     return this.http.get<Book[]>('api/books');

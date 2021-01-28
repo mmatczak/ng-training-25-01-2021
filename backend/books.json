@@ -7,13 +7,13 @@
     },
     {
       "id": 1,
-      "title": "JavaScript. The Good Parts",
-      "author": "Douglas Crckford"
+      "author": "Douglas Crckford",
+      "title": "JavaScript. The Good Parts 2"
     },
     {
       "id": 2,
-      "title": "Some funny book",
-      "author": "John Example"
+      "author": "John Exam",
+      "title": "Some funny book"
     },
     {
       "id": 3,
